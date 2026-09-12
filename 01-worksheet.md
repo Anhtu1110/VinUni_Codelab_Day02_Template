@@ -60,15 +60,22 @@ Hãy sử dụng **4 Lenses** dưới đây để quét qua hoạt động vận
 > Hãy sử dụng prompt sau để brainstorm các bài toán thực tế nếu bạn chưa có ý tưởng:
 > *"Tôi là AI Engineer tại Vin Smart Future (Vingroup). Tôi đang tìm kiếm các pain point vận hành cụ thể có thể tối ưu bằng AI cho mảng [Chọn một: VinFast / Xanh SM / Vinhomes / Vinmec]. Hãy gợi ý cho tôi 5 quy trình nghiệp vụ thủ công, tốn nhiều thời gian và gây rò rỉ hiệu suất kèm con số thống kê ước tính về tổn thất."*
 
-### 📝 List bài toán của tôi:
-| # | Subsidiary (VinFast/Xanh SM...) | Lens | Mô tả ngắn bài toán |
-|---|----------------------------------|------|---------------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
-
+   ### 📝 List bài toán của tôi:
+   | # | Subsidiary| Lens                       | Mô tả ngắn bài toán |
+   |---|----------------------------------|------|---------------------|
+   | 1 |Vinfast |   Bảo trì pin                    |Chỉ phát hiện suy giảm pin khi BMS báo     ngưỡng                                            cố   định → thay pin sớm/ngừng hoạt động ngoài                                            kế hoạch, tốn ~12.000 USD/xe/năm |
+                  (Predictive Maintenance) 
+   | 2 | | | |
+   | 3 | | | |
+   | 4 | | | |
+   | 5 | | | |
+📝 List bài toán của tôi:
+#	  Subsidiary (VinFast/Xanh SM...)	Lens	Mô tả ngắn bài toán
+|1|	|VinFast|	|Bảo trì pin (Predictive Maintenance)|	Chỉ phát hiện suy giảm pin khi BMS báo ngưỡng cố định → thay pin sớm/ngừng hoạt động ngoài kế hoạch, tốn ~12.000 USD/xe/năm
+|2|	|VinFast|	|Sản xuất — QA/QC                    |	Kiểm tra chất lượng pin dựa trên lấy mẫu thủ công (chỉ 1-2% cell) → lọt lỗi ra pack, rủi ro khiếu nại bảo hành >500.000 USD/vụ
+|3|	|VinFast|	|Chuỗi cung ứng (Supply Chain Planning)|	Lập kế hoạch linh kiện qua spreadsheet/thủ công, thiếu visibility nhà cung cấp → lỗi sắp xếp linh kiện gây dừng dây chuyền, thiệt hại đến 695 triệu USD/năm/nhà máy lớn
+|4|	|Xanh SM|	|Trợ lý AI / CX (Dispatcher & Driver Support)|	Câu hỏi lặp lại của tài xế (pin, trạm sạc, sự cố) vẫn xử lý qua tổng đài người thật → chi phí mỗi liên hệ có agent cao hơn self-service ~11 USD
+|5|	|VinFast|	|Bảo trì thiết bị sản xuất (Equipment Maintenance)|	Robot hàn/dây chuyền lắp ráp bảo trì theo lịch cố định thay vì theo tình trạng thực tế → downtime ngoài kế hoạch gây thiệt hại ước tính 172 triệu USD/nhà máy/năm
 ---
 
 # 🃏 Phase 2 — QUICK-ASSESS (Cá nhân, 30 min)
@@ -77,27 +84,97 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ QUICK PROBLEM CARD #___                                     │
+│ QUICK PROBLEM CARD #1                                       │
 │                                                             │
-│ Bài toán (1 câu): ________________________________________  │
-│ Công ty thành viên: [ ] VinFast  [ ] Xanh SM  [ ] Vinhomes  │
+│ Bài toán (1 câu): Chỉ phát hiện suy giảm pin khi BMS báo    │
+│ vượt ngưỡng cố định → thay pin sớm/downtime ngoài kế hoạch  │
+│ Công ty thành viên: [X] VinFast  [ ] Xanh SM  [ ] Vinhomes  │
 │                     [ ] Vinmec   [ ] Khác (Ghi rõ)________  │
 │                                                             │
-│ Ai đang đau (Actor)? ______________________________________ │
+│ Ai đang đau (Actor)? Kỹ sư bảo trì đội xe                   │
+│   / Trung tâm dịch vụ                                       │
 │                                                             │
 │ Workflow thủ công hiện tại (3-5 bước):                      │
-│   1. ___ ──> 2. ___ ──> 3. ___ ──> 4. ___                   │
+│     1. BMS đo thông số pin theo chu kỳ cố định              │
+│ ──> 2. Vượt ngưỡng cảnh báo cứng → gửi cảnh báo             │
+│ ──> 3. Lên lịch đưa xe về xưởng kiểm tra                    │
+│ ──> 4. Chẩn đoán thủ công bằng thiết bị tại xưởng           │
 │                                                             │
-│ Bước nào tốn thời gian/lỗi nhất? ___ (⏱ ___ phút/lượt)      │
-│ AI có thể nhảy vào hỗ trợ ở bước nào? _____________________ │
+│ Bước nào tốn thời gian/lỗi nhất? Bước 3-4 (⏱ 45-60 phút/lượt) │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 1-2 (dự đoán sớm │
+│ trước khi chạm ngưỡng cứng)                                 │
 │                                                             │
-│ Đo thành công bằng gì (Metric có số)? ______________________ │
-│   VD: "Giảm thời gian soạn phản hồi từ 10 min ──> under 2 min"│
+│ Đo thành công bằng gì (Metric có số)?                       │
+│Giảm 30-50% xe thay pin khẩn cấp ngoài kế hoạch từ           │
 │                                                             │
-│ Quick Architecture: [ ] No AI  [ ] Rule  [ ] LLM  [ ] Agent │
+│                                                             │
+│ Quick Architecture: [ ] No AI  [X] Rule  [ ] LLM  [ ] Agent │
 └─────────────────────────────────────────────────────────────┘
 ```
 
+```
+─────────────────────────────────────────────────────────────┐
+│ QUICK PROBLEM CARD #2                                       │
+│                                                             │
+│ Bài toán (1 câu): Kiểm tra chất lượng pin dựa trên lấy mẫu  │
+│ thủ công (~1-2% cell) → lọt lỗi ra pack, rủi ro bảo hành lớn│
+│ Công ty thành viên: [X] VinFast  [ ] Xanh SM  [ ] Vinhomes  │
+│                     [ ] Vinmec   [ ] Khác (Ghi rõ)________  │
+│                                                             │
+│ Ai đang đau (Actor)? Kỹ sư QC dây chuyền                    │
+│   / Trưởng ca sản xuất                                      │
+│                                                             │
+│ Workflow thủ công hiện tại (3-5 bước):                      │
+│     1. Cell chạy qua dây chuyền coating/assembly            │
+│ ──> 2. Lấy mẫu ngẫu nhiên 1-2% cell để kiểm tra             │
+│ ──> 3. Kỹ thuật viên quan sát bằng mắt/thiết bị đo thủ công │
+│ ──> 4. Cell không nằm trong mẫu tiếp tục đi vào pack        │
+│                                                             │
+│ Bước nào tốn thời gian/lỗi nhất? Bước 3 (⏱ phụ thuộc tay   │
+│ nghề dễ bỏ qua lỗi vi mô: nứt vi mô, lệch coating)          │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 2-3 (computer    │
+│ vision quét 100% cell thay vì lấy mẫu)                      │
+│                                                             │
+│ Đo thành công bằng gì (Metric có số)?                       │
+│Giảm tỷ lệ defect escape (cell lỗi lọt  qua QC)              │
+│   → giảm 60-75%                                             │
+│                                                             │
+│                                                             │
+│ Quick Architecture: [ ] No AI  [X] Rule  [ ] LLM  [X] Agent │
+│ Computer Vision + anomaly dectection                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+```
+─────────────────────────────────────────────────────────────┐
+│ QUICK PROBLEM CARD #3                                       │
+│                                                             │
+│ Bài toán (1 câu): Câu hỏi lặp lại của tài xế (pin, trạm sạc,│
+│ sự cố) vẫn xử lý qua tổng đài người thật, tốn chi phí cao   │
+│ Công ty thành viên: [] VinFast  [ X] Xanh SM  [ ] Vinhomes  │
+│                     [ ] Vinmec   [ ] Khác (Ghi rõ)________  │
+│                                                             │
+│ Ai đang đau (Actor)? Tài xế GSM / Nhân viên tổng đài        │
+│                                                             │
+│ Workflow thủ công hiện tại (3-5 bước):                      │
+│    1. Tài xế gọi tổng đài khi gặp sự cố (pin yếu, cần chỉ đường)  │
+│──> 2. Nhân viên tiếp nhận, xác minh thông tin xe/vị trí     │
+│──> 3. Soạn phản hồi/tin nhắn hướng dẫn thủ công             │
+│──> 4. Gửi tin, theo dõi tài xế đến điểm hẹn                 │
+│                                                             │
+│ Bước nào tốn thời gian/lỗi nhất? Bước 3 (⏱ ~5-10 phút/lượt  │
+│soạn phản hồi, dễ sai khi pin critical cần xử lý gấp)        │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 3 (LLM soạn      │
+│ draft phản hồi + rule-based kiểm tra ngưỡng pin an toàn)    │
+│                                                             │
+│ Đo thành công bằng gì (Metric có số)?                       │
+│Giảm thời gian soạn phản hồi từ ~8 phút                      │
+│ ─> dưới 2 phút; giảm chi phí  (~11 USD/lượt)                │
+│                                                             │
+│                                                             │
+│ Quick Architecture: [ ] No AI  [] Rule  [X ] LLM  [ ] Agent │
+└─────────────────────────────────────────────────────────────┘
+```
 > [!TIP]
 > **🤖 AI Prompts — Stress-Test thẻ bài toán:**
 > Hãy dán nội dung thẻ bài toán của bạn vào LLM để nhận phản biện:
@@ -112,7 +189,37 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 * 🔴 **Bottleneck:** Bước gây tắc nghẽn, tốn thời gian, hoặc sai sót nhiều nhất.
 * 🔄 **Handoff:** Điểm chuyển giao thông tin giữa người và hệ thống, hoặc giữa các bộ phận.
 * Ghi rõ thời gian vận hành trung bình: **Tổng cộng = ____ phút/lượt**.
-
+Quy trình xử lý cảnh báo suy giảm pin hiện tại của đội bảo trì VinFast:
+```text
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│ Bước 1       │     │ Bước 2       │     │ Bước 3       │     │ Bước 4       │
+│ BMS đo thông │     │ So sánh với  │     │ Lên lịch xe  │     │ Chẩn đoán    │
+│ số pin theo  │ ──→ │ ngưỡng cảnh  │ ──→ │ về xưởng     │ ──→ │ thủ công tại │
+│ chu kỳ cố    │     │ báo cứng     │     │ kiểm tra     │     │ xưởng        │
+│ định         │     │ (voltage/nhiệt)│   │              │     │              │
+│ Ai: BMS/hệ   │     │ Ai: Hệ thống │     │ Ai: Trung tâm│     │ Ai: Kỹ thuật │
+│ thống        │     │              │     │ dịch vụ      │     │ viên         │
+│ ⏱ Tự động    │     │ ⏱ Tự động    │     │ ⏱ 30 phút 🔴 │     │ ⏱ 45 phút 🔴 │
+│ In: Dữ liệu  │     │ In: Số liệu  │     │ In: Cảnh báo │     │ In: Xe + hồ  │
+│ cảm biến     │     │ đo           │     │ vượt ngưỡng  │     │ sơ           │
+│ Out: Số liệu │     │ Out: Cảnh    │     │ Out: Lịch hẹn│     │ Out: Kết luận│
+│ pin thô      │     │ báo (nếu có) │     │              │     │ + đề xuất    │
+└──────────────┘     └──────────────┘     └──────────────┘     └──────────────┘
+                                                                      │
+                                                                      ▼
+                                                               ┌──────────────┐
+                                                               │ Bước 5       │
+                                                               │ Quyết định   │
+                                                               │ thay pin /   │
+                                                               │ duyệt bảo    │
+                                                               │ hành         │
+                                                               │ Ai: Bộ phận  │
+                                                               │ bảo hành     │
+                                                               │ ⏱ 1-2 ngày 🔴│
+                                                               └──────────────┘
+🔴 = Bottlenecks
+⏱ Tổng thời gian xử lý (chưa tính chờ duyệt bảo hành): ~75 phút/lượt tại xưởng.
+```
 ## 3.2. Problem Statement (6-field) & Metrics (15 min)
 Điền đầy đủ 6 trường thông tin của bài toán:
 
@@ -124,13 +231,39 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 | **4. Business Impact** | Tổn thất thực tế đo bằng thời gian, chi phí, hoặc SLA của Vingroup. |
 | **5. Success Metric** | AI giải quyết được thì đạt ngưỡng số mấy? (Ví dụ: *"85% vé được phân loại dưới 10s"*). |
 | **6. Operational Boundary** | AI được phép làm gì, TUYỆT ĐỐI không được làm gì, điểm nào cần duyệt? |
+Field	Nội dung
+1. Actor / Operator:	Kỹ sư bảo trì đội xe (Fleet Maintenance Engineer) và Trung tâm dịch vụ VinFast.
+2. Current Workflow:	Hệ thống BMS đo thông số pin (điện áp, nhiệt độ, nội trở) theo chu kỳ cố định và chỉ phát cảnh báo khi vượt ngưỡng cứng đã cài sẵn. Khi có cảnh báo, trung tâm dịch vụ lên lịch xe về xưởng, kỹ thuật viên chẩn đoán thủ công bằng thiết bị đo tại chỗ, sau đó gửi kết luận cho bộ phận bảo hành duyệt thay pin. 5 bước, phát hiện muộn (chỉ khi đã vượt ngưỡng), mất ~75 phút xử lý tại xưởng (chưa tính thời gian chờ duyệt bảo hành 1-2 ngày).
+3. Bottleneck:	Bước 2 & 4 (mất ~50 phút hiệu quả): Ngưỡng cảnh báo cứng không nắm được xu hướng suy giảm dần theo thời gian, khiến phần lớn ca hỏng chỉ được phát hiện khi đã ở giai đoạn nguy cấp; kỹ thuật viên phải chẩn đoán lại từ đầu bằng thiết bị đo thủ công tại xưởng thay vì có sẵn dữ liệu dự đoán từ xa.
+4. Business Impact:	Suy giảm pin không được cảnh báo sớm khiến chi phí âm thầm ước tính ~12.000 USD/xe/năm (thay pin sớm hơn cần thiết + downtime ngoài kế hoạch). Với quy mô đội xe VinFast, số ca thay pin khẩn cấp ngoài lịch trình gây quá tải cho trung tâm dịch vụ và ảnh hưởng trải nghiệm khách hàng (xe nằm xưởng lâu hơn dự kiến).
+5. Success Metric:	Tăng lead-time cảnh báo sớm (từ lúc phát hiện xu hướng suy giảm đến khi cần can thiệp) thêm tối thiểu 15-30 ngày so với ngưỡng cứng hiện tại (Efficiency).
+6. Operational Boundary:	AI được phép truy xuất dữ liệu telemetry pin (điện áp, nhiệt độ, SOC, số chu kỳ sạc) và đưa ra cảnh báo sớm/khuyến nghị lịch kiểm tra dạng nháp cho trung tâm dịch vụ. CẤM: AI không được tự động ra quyết định thay pin hoặc duyệt chi phí bảo hành mà không qua bộ phận bảo hành phê duyệt; không được ghi đè/tắt ngưỡng cảnh báo an toàn cứng của BMS liên quan đến nguy cơ cháy nổ, dù model dự đoán cho kết quả khác.
+## 3.3. Future-State Flow & AI Fit
 
-## 3.3. Future-State Flow & AI Fit (25 min)
-* **Xác định mức AI Fit (AI-Fit Matrix):** Giải pháp thuộc nhóm nào? [ ] Rule / State-Machine [ ] LLM Feature [ ] Agentic Loop.
-* **Vẽ Future-State Flow:** Đánh dấu rõ:
-  * 🔵 **AI Step:** Tác vụ LLM xử lý.
-  * 🟢 **Human Step (HITL):** Bước con người phê duyệt/review (Human-in-the-loop).
-  * ↩️ **Fallback:** Kế hoạch dự phòng khi LLM trả về kết quả lỗi hoặc không tự tin.
+* **AI Fit:** Chọn Rule-based / Threshold Engine động (không dùng LLM hay Agent) — vì suy giảm pin tuân theo mô hình vật lý/hoá học đã biết, có thể mã hoá thành công thức tính toán trực tiếp từ datasheet cell, không cần huấn luyện model.
+* **Quy trình tương lai (Future-State):**
+
+```text
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│ Bước 1       │     │ Bước 2       │     │ Bước 3       │     │ Bước 4       │
+│ BMS thu thập │     │ 🔵 Threshold │     │ 🔵 Engine    │     │ 🟢 Trung tâm │
+│ telemetry pin│ ──→ │ Engine tính  │ ──→ │ xếp hạng mức │ ──→ │ dịch vụ duyệt│
+│ liên tục     │     │ độ suy giảm  │     │ độ ưu tiên & │     │ lịch kiểm tra│
+│ (real-time)  │     │ động (không  │     │ đề xuất lịch │     │ / thay pin   │
+│              │     │ chỉ ngưỡng   │     │ kiểm tra sớm │     │              │
+│              │     │ cứng)        │     │ dạng nháp    │     │              │
+└──────────────┘     └──────────────┘     └──────────────┘     └──────────────┘
+                                                                      │
+                                                                      ▼
+                                                               ↩️ Fallback:
+                                                               Nếu độ tin cậy dự
+                                                               đoán thấp (thiếu
+                                                               dữ liệu/nhiễu),
+                                                               giữ nguyên ngưỡng
+                                                               cứng BMS hiện tại
+                                                               làm an toàn cuối.
+```
+---
 
 ---
 
