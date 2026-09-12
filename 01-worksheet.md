@@ -63,11 +63,16 @@ Hãy sử dụng **4 Lenses** dưới đây để quét qua hoạt động vận
 ### 📝 List bài toán của tôi:
 | # | Subsidiary (VinFast/Xanh SM...) | Lens | Mô tả ngắn bài toán |
 |---|----------------------------------|------|---------------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
+| 1 | | | |### 📝 List bài toán của tôi:
+
+| # | Subsidiary (VinFast/Xanh SM...) | Lens | Mô tả ngắn bài toán |
+|---|----------------------------------|------|---------------------|
+| 1 | Xanh SM | Repetitive | Tự động hóa việc tiếp nhận cảnh báo, phân loại và soạn lệnh điều xe sạc pin di động khi taxi điện gặp sự cố pin dưới 5%. |
+| 2 | Vinhomes | Time-consuming | Tự động tổng hợp thông tin, phân loại mức độ khẩn cấp và soạn thảo phản hồi nháp cho các khiếu nại/yêu cầu sửa chữa của cư dân trên App VinHome. |
+| 3 | VinFast | AI-upgrade | Phân tích dữ liệu lịch sử vận hành và chỉ số sức khỏe pin (SoH) từ cảm biến telematics để dự đoán và cảnh báo lịch bảo trì pin trước khi hỏng hóc. |
+| 4 | Vinpearl | Stakeholder Pain | Xử lý tư vấn, hỗ trợ đặt lịch/đổi vé vui chơi giải trí tự động cho khách hàng theo thời gian thực thay vì phản hồi rập khuôn hoặc bắt khách chờ lâu. |
+| 5 | Vinmec | Time-consuming | Trích xuất thông tin trọng tâm từ lịch sử khám bệnh và hồ sơ xét nghiệm để tóm tắt bệnh án cho bác sĩ trước ca khám. |
+
 
 ---
 
@@ -77,24 +82,28 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ QUICK PROBLEM CARD #___                                     │
+│ QUICK PROBLEM CARD #__1_                                     │
 │                                                             │
-│ Bài toán (1 câu): ________________________________________  │
-│ Công ty thành viên: [ ] VinFast  [ ] Xanh SM  [ ] Vinhomes  │
+│ Bài toán (1 câu): Tự động hóa điều phối xe sạc pin di động khi taxi điện Xanh SM gặp sự cố pin khẩn cấp.____________________________  │
+│ Công ty thành viên: [ ] VinFast  [ v] Xanh SM  [ ] Vinhomes  │
 │                     [ ] Vinmec   [ ] Khác (Ghi rõ)________  │
 │                                                             │
-│ Ai đang đau (Actor)? ______________________________________ │
+│ Ai đang đau (Actor)?_Nhân viên tổng đài điều vận (Dispatcher) và Tài xế._________ │
 │                                                             │
 │ Workflow thủ công hiện tại (3-5 bước):                      │
-│   1. ___ ──> 2. ___ ──> 3. ___ ──> 4. ___                   │
+│   1.Tài xế gọi tổng đài báo sắp hết pin khẩn cấp. ──> 
+2. Tổng đài viên kiểm tra vị trí xe trên bản đồ._ 
+─ 3. Tổng đài viên đo khoảng cách thủ công tới các trạm sạc.__──
+> 4. Tổng đài viên gọi điện cho đội xe sạc di động để điều xe.
+___                   │
 │                                                             │
-│ Bước nào tốn thời gian/lỗi nhất? ___ (⏱ ___ phút/lượt)      │
-│ AI có thể nhảy vào hỗ trợ ở bước nào? _____________________ │
+│ Bước nào tốn thời gian/lỗi nhất? _2 và 3__ (⏱ __6_ phút/lượt)      │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? ________2 3,4,_____________ │
 │                                                             │
-│ Đo thành công bằng gì (Metric có số)? ______________________ │
+│ Đo thành công bằng gì (Metric có số)? _______8 phút và dướ 1 phút/lượt______________ │
 │   VD: "Giảm thời gian soạn phản hồi từ 10 min ──> under 2 min"│
 │                                                             │
-│ Quick Architecture: [ ] No AI  [ ] Rule  [ ] LLM  [ ] Agent │
+│ Quick Architecture: [ ] No AI  [ v] Rule  [ v] LLM  [ ] Agent │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -165,7 +174,8 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 [ ] **NO-GO (Không khả thi / Rule-based tốt hơn):** Hủy bỏ dự án AI này.
 
 **Justification (Lý giải quyết định dựa trên bằng chứng kỹ thuật và chi phí):**
-> *Viết lý giải chi tiết tại đây*
+> *Viết lý giải ch
+> Bài toán có ROI cao, giảm rủi ro hỏng hóc tài sản (pin EV). Thử nghiệm kỹ thuật ở Phase 4 cho thấy AI tuân thủ nghiêm ngặt ranh giới an toàn (không gửi lệnh trực tiếp nhờ thẻ [DRAFT_ONLY] và luôn ưu tiên xe cứu hộ khi pin < 5%), đảm bảo kiểm soát được rủi ro qua cơ chế Human-in-the-loop (HITL). 
 
 ---
 
