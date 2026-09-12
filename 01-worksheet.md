@@ -61,13 +61,14 @@ Hãy sử dụng **4 Lenses** dưới đây để quét qua hoạt động vận
 > *"Tôi là AI Engineer tại Vin Smart Future (Vingroup). Tôi đang tìm kiếm các pain point vận hành cụ thể có thể tối ưu bằng AI cho mảng [Chọn một: VinFast / Xanh SM / Vinhomes / Vinmec]. Hãy gợi ý cho tôi 5 quy trình nghiệp vụ thủ công, tốn nhiều thời gian và gây rò rỉ hiệu suất kèm con số thống kê ước tính về tổn thất."*
 
 ### 📝 List bài toán của tôi:
+
 | # | Subsidiary (VinFast/Xanh SM...) | Lens | Mô tả ngắn bài toán |
 |---|----------------------------------|------|---------------------|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
+| 1 | VinFast | After-sales / Customer Service | Tự động tiếp nhận & phân loại yêu cầu bảo hành/sửa chữa, giảm thời gian CS đọc, phân loại và routing ticket. |
+| 2 | VinFast | Service / Diagnostics | Chẩn đoán lỗi trước khi xe vào xưởng dựa trên complaint, diagnostic data và lịch sử sửa chữa để giảm thời gian kiểm tra thủ công. |
+| 3 | VinFast | Supply Chain / Inventory | Dự báo nhu cầu phụ tùng theo model xe, khu vực và lịch sử lỗi để giảm overstock và stockout tại các service center. |
+| 4 | VinFast | Warranty / Operations | Tự động kiểm tra claim bảo hành bằng cách đối chiếu thông tin xe, lịch sử sửa chữa và chính sách warranty, giảm manual review. |
+| 5 | VinFast | Predictive Maintenance | Dự đoán xe có nguy cơ phát sinh lỗi từ telemetry, error codes và lịch sử bảo dưỡng để chủ động cảnh báo và đặt lịch service. |
 
 ---
 
@@ -77,24 +78,56 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ QUICK PROBLEM CARD #___                                     │
+│ QUICK PROBLEM CARD #01                                      │
 │                                                             │
-│ Bài toán (1 câu): ________________________________________  │
-│ Công ty thành viên: [ ] VinFast  [ ] Xanh SM  [ ] Vinhomes  │
-│                     [ ] Vinmec   [ ] Khác (Ghi rõ)________  │
+│ Bài toán (1 câu):                                           │
+│ Tự động tiếp nhận, hiểu và phân loại yêu cầu bảo hành/      │
+│ sửa chữa để giảm thời gian triage, sai routing và SLA.      │
 │                                                             │
-│ Ai đang đau (Actor)? ______________________________________ │
+│ Công ty thành viên: [✓] VinFast                             │
 │                                                             │
-│ Workflow thủ công hiện tại (3-5 bước):                      │
-│   1. ___ ──> 2. ___ ──> 3. ___ ──> 4. ___                   │
+│ Ai đang đau (Actor)?                                        │
+│ Customer Service / Service Advisor / Service Center        │
 │                                                             │
-│ Bước nào tốn thời gian/lỗi nhất? ___ (⏱ ___ phút/lượt)      │
-│ AI có thể nhảy vào hỗ trợ ở bước nào? _____________________ │
+│ Workflow hiện tại (3-5 bước):                              │
+│   1. Nhận complaint                                         │
+│      ↓                                                      │
+│   2. Đọc & xác định lỗi                                    │
+│      ↓                                                      │
+│   3. Tra cứu xe / lịch sử / warranty                        │
+│      ↓                                                      │
+│   4. Phân loại & routing ticket                            │
+│      ↓                                                      │
+│   5. Nhân sự xử lý / escalate nếu cần                      │
 │                                                             │
-│ Đo thành công bằng gì (Metric có số)? ______________________ │
-│   VD: "Giảm thời gian soạn phản hồi từ 10 min ──> under 2 min"│
+│ Bước nào tốn thời gian/lỗi nhất?                            │
+│ Triage & routing ticket (~8 phút/lượt),                    │
+│ đặc biệt với complaint dạng free-text / không rõ lỗi.      │
 │                                                             │
-│ Quick Architecture: [ ] No AI  [ ] Rule  [ ] LLM  [ ] Agent │
+│ AI có thể nhảy vào bước nào?                               │
+│ Bước 2-4:                                                   │
+│ • LLM hiểu complaint dạng free-text                        │
+│ • Extract: triệu chứng, bộ phận, loại lỗi                  │
+│ • Rule Engine kiểm tra severity & warranty/routing         │
+│ • Auto-route case rõ ràng                                  │
+│ • Human review khi confidence thấp / case critical         │
+│                                                             │
+│ Đo thành công bằng gì?                                      │
+│ • Triage time: ~8 min → <3 min/ticket                     │
+│ • Routing accuracy: ≥95%                                   │
+│ • Critical-case recall: ≥99%                               │
+│ • Manual correction rate: ≤5%                              │
+│ • SLA breach rate: giảm ≥20%                               │
+│ • Cost/ticket: thấp hơn hoặc không vượt baseline            │
+│                                                             │
+│ Quick Architecture:                                        │
+│ [ ] No AI   [✓] Hybrid AI + Rule   [ ] LLM only   [ ] Agent│
+│                                                             │
+│ Principle:                                                 │
+│ Rule-based xử lý case có pattern rõ ràng;                  │
+│ LLM chỉ xử lý free-text/ambiguous cases và đề xuất         │
+│ classification. Case critical hoặc confidence thấp         │
+│ → Human-in-the-loop.                                       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -108,32 +141,97 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 # 🏗️ Phase 3 — DEEP-DIVE (Nhóm, 85 min)
 
 ## 3.1. Current-State Workflow Mapping (25 min)
-**Vẽ quy trình hiện tại lên bảng/giấy A3.** Sử dụng các ký hiệu:
-* 🔴 **Bottleneck:** Bước gây tắc nghẽn, tốn thời gian, hoặc sai sót nhiều nhất.
-* 🔄 **Handoff:** Điểm chuyển giao thông tin giữa người và hệ thống, hoặc giữa các bộ phận.
-* Ghi rõ thời gian vận hành trung bình: **Tổng cộng = ____ phút/lượt**.
+┌──────────────────┐
+│ 1. Customer      │
+│ gửi yêu cầu      │
+│ (App/Web/Hotline)│
+└────────┬─────────┘
+         │
+         🔄 Handoff
+         ↓
+┌──────────────────┐
+│ 2. CS tiếp nhận  │
+│ & đọc complaint  │
+│ ⏱ ~2 min         │
+└────────┬─────────┘
+         │
+         🔴 Bottleneck
+         ↓
+┌────────────────────────┐
+│ 3. CS xác định:        │
+│ - Model/VIN            │
+│ - Triệu chứng          │
+│ - Loại lỗi             │
+│ - Mức độ nghiêm trọng  │
+│ ⏱ ~3 min               │
+└───────────┬────────────┘
+            │
+            🔄 Handoff
+            ↓
+┌────────────────────────┐
+│ 4. Tra cứu lịch sử xe  │
+│ & chính sách warranty  │
+│ ⏱ ~8 min               │
+└───────────┬────────────┘
+            │
+            🔴 Bottleneck
+            ↓
+┌────────────────────────┐
+│ 5. Phân loại & routing │
+│ tới Service Team/SC    │
+│ ⏱ ~1 min               │
+└───────────┬────────────┘
+            │
+            🔄 Handoff
+            ↓
+┌──────────────────┐
+│ 6. Technician /  │
+│ Service Advisor  │
+│ tiếp nhận case   │
+└──────────────────┘
 
+⏱ TỔNG THỜI GIAN TRIAGE ≈ 15 phút/lượt
 ## 3.2. Problem Statement (6-field) & Metrics (15 min)
 Điền đầy đủ 6 trường thông tin của bài toán:
 
 | Field | Nội dung chi tiết |
 |---|---|
-| **1. Actor / Operator** | Ai đang thực hiện tác vụ hằng ngày? |
-| **2. Current Workflow** | Mô tả tóm tắt quy trình thủ công hiện tại và công cụ sử dụng. |
-| **3. Bottleneck** | Bước nào chậm, lỗi, hoặc cần xử lý ngôn ngữ tự động nhiều nhất? |
-| **4. Business Impact** | Tổn thất thực tế đo bằng thời gian, chi phí, hoặc SLA của Vingroup. |
-| **5. Success Metric** | AI giải quyết được thì đạt ngưỡng số mấy? (Ví dụ: *"85% vé được phân loại dưới 10s"*). |
-| **6. Operational Boundary** | AI được phép làm gì, TUYỆT ĐỐI không được làm gì, điểm nào cần duyệt? |
+| **1. Actor / Operator** |Customer Service (CS) / Service Advisor là người trực tiếp tiếp nhận, đọc, phân loại và routing các yêu cầu bảo hành/sửa chữa. |
+| **2. Current Workflow** | Khách hàng complaint → CS tiếp nhận yêu cầu và tra cứu thông tin xe/lịch sử sửa chữa → đánh giá loại lỗi và mức độ nghiêm trọng → phân loại, chuyển case đến Service Center. |
+| **3. Bottleneck** | Đọc hiểu complaint, xác định loại lỗi/severity và routing case là bottleneck lớn nhất vì thông tin đầu vào thường không có cấu trúc và phụ thuộc nhiều vào kinh nghiệm của CS. |
+| **4. Business Impact** | Với assumption 100.000 requests/năm × 8 phút/request, hoạt động manual triage tiêu tốn khoảng 13.333 giờ/năm, tương đương khoảng 6,7 FTE/năm nếu quy đổi 2.000 giờ/FTE. |
+| **5. Success Metric** | Giảm thời gian triage từ ~8 phút → dưới 3 phút/ticket. |
+| **6. Operational Boundary** | AI được phép đọc và hiểu complaint, trích xuất VIN/model/triệu chứng, phân loại lỗi và severity, đề xuất khả năng áp dụng warranty, service team, thông tin cần bổ sung và draft phản hồi; tuy nhiên không được tự quyết định hoặc từ chối warranty, đưa ra chẩn đoán kỹ thuật cuối cùng, cam kết chi phí/sửa chữa, hay tự xử lý các case Critical mà không có Human Review. |
 
 ## 3.3. Future-State Flow & AI Fit (25 min)
-* **Xác định mức AI Fit (AI-Fit Matrix):** Giải pháp thuộc nhóm nào? [ ] Rule / State-Machine [ ] LLM Feature [ ] Agentic Loop.
+* **Xác định mức AI Fit (AI-Fit Matrix):** Giải pháp thuộc nhóm nào? [✓] LLM Feature
+[✓] Rule / State-Machine [ ] Agentic Loop.
 * **Vẽ Future-State Flow:** Đánh dấu rõ:
   * 🔵 **AI Step:** Tác vụ LLM xử lý.
   * 🟢 **Human Step (HITL):** Bước con người phê duyệt/review (Human-in-the-loop).
   * ↩️ **Fallback:** Kế hoạch dự phòng khi LLM trả về kết quả lỗi hoặc không tự tin.
 
 ---
-
+Customer submits complaint
+        ↓
+🔵 AI: Extract VIN / model / symptoms
+        ↓
+🔵 AI: Classify issue + severity + warranty signal
+        ↓
+🔵 AI: Recommend service team + required information
+        ↓
+    Confidence ≥ 0.85
+       /       \
+     YES        NO
+      ↓          ↓
+🟢 Human      ↩️ Fallback:
+Review        Manual triage
+      ↓
+Approve / Edit
+      ↓
+Create Service Ticket
+      ↓
+Service Center / Technician
 # 💻 Phase 4 — TECHNICAL PROMPT PROTOTYPE (Nhóm, 30 min)
 
 Để đảm bảo kỹ sư của Vin Smart Future luôn giữ vững năng lực lập trình, nhóm của bạn sẽ tiến hành **lập trình bản mẫu prompt** trực tiếp trên **Gemini 2.5 Flash** bằng Python để stress-test hệ thống.
@@ -156,18 +254,17 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 
 ### AI Readiness Checklist:
 1. [ ] Chúng tôi có sẵn dữ liệu mẫu/logs sạch để test?
-2. [ ] Rủi ro khi AI sai có nằm trong tầm kiểm soát (qua HITL hoặc Fallback)?
+2. [X] Rủi ro khi AI sai có nằm trong tầm kiểm soát (qua HITL hoặc Fallback)?
 3. [ ] Stakeholders sẵn sàng thay đổi quy trình làm việc cũ?
 
 ### Quyết định cuối cùng của Ban Giám Đốc Vin Smart Future:
-[ ] **GO (Bắt đầu xây dựng Prototype):** Bắt đầu phát triển với scope hẹp.
-[ ] **NOT YET (Cần tích lũy thêm dữ liệu/xác lập baseline):** Trì hoãn để chuẩn bị thêm.
-[ ] **NO-GO (Không khả thi / Rule-based tốt hơn):** Hủy bỏ dự án AI này.
+Mình sẽ chọn:
 
-**Justification (Lý giải quyết định dựa trên bằng chứng kỹ thuật và chi phí):**
-> *Viết lý giải chi tiết tại đây*
+🟡 NOT YET
 
----
+Lý do:
+
+Giải pháp có tính khả thi về mặt kỹ thuật và mô hình Hybrid LLM + Rule Engine phù hợp với bài toán. Tuy nhiên, chưa có dữ liệu ticket thực tế để xác thực baseline 8 phút/ticket, routing accuracy, critical-case recall và chi phí vận hành. Vì vậy, nên tiếp tục xây dựng prototype/PoC nhưng chưa triển khai production cho đến khi có dữ liệu thực tế để đánh giá.
 
 # 📝 Phase 6 — REFLECTION (Cá nhân)
 *Ghi nhận phản ánh của cá nhân bạn về việc phối hợp với AI trong buổi học hôm nay vào file `03-ai-log.md`.*
