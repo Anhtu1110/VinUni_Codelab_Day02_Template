@@ -1,22 +1,22 @@
-# 🚀 Phase 3 — DEEP-DIVE REPORT (VinFast Telemetry Analysis)
+# 🚀 Phase 3 — DEEP-DIVE REPORT (Customer Service Triage Automation)
 
 ## 3.2. Problem Statement (6-field)
 | Field | Nội dung chi tiết |
 |---|---|
-| **1. Actor / Operator** | Đội ngũ Giám sát bảo trì & Vận hành (NOC/SOC Team) tại VinFast. |
-| **2. Current Workflow** | 1. Hệ thống IoT thu thập log (nhiệt độ, điện áp) từ hàng ngàn xe VF.<br>2. Rule-based cảnh báo đỏ khi xe vượt ngưỡng an toàn.<br>3. Kỹ sư mở log thô (DTC codes).<br>4. Tra cứu manual thủ công để hiểu nguyên nhân.<br>5. Lập báo cáo kỹ thuật và gọi khách hàng đưa xe đi kiểm tra. |
-| **3. Bottleneck** | **Bước 3 & 4 (mất 10-15 phút/xe):** Việc đọc chuỗi log thô và tra chéo tài liệu kỹ thuật để chẩn đoán nguyên nhân tốn rất nhiều thời gian, dễ gây nghẽn cổ chai khi số lượng cảnh báo tăng vọt vào mùa nắng nóng. |
-| **4. Business Impact** | Chậm trễ trong việc cảnh báo có thể dẫn đến chai pin, giảm tuổi thọ linh kiện, thậm chí rủi ro cháy nổ. Điều này gây thiệt hại lớn về chi phí bảo hành (Warranty Cost) cho VinFast và đe dọa sự an toàn của khách hàng. |
-| **5. Success Metric** | 1. Giảm thời gian chẩn đoán và dịch mã lỗi từ 15 phút xuống dưới 30 giây/xe.<br>2. AI phân loại chính xác 90% các cảnh báo nhiệt độ/điện áp thông thường, giải phóng sức lao động cho kỹ sư. |
-| **6. Operational Boundary** | **ĐƯỢC PHÉP:** AI được quyền đọc log, dịch mã DTC sang ngôn ngữ tự nhiên và đề xuất mức độ khẩn cấp (Low/High).<br>**CẤM (BOUNDARY):** AI **tuyệt đối không được** tự động gửi lệnh can thiệp (như ngắt động cơ/ngắt sạc) xuống xe của khách, và không được tự động nhắn tin thông báo hỏng hóc cho khách hàng khi chưa có kỹ sư phê duyệt (Bắt buộc Human-in-the-loop). |
+| **1. Actor / Operator** | Customer Service (CS) / Service Advisor là người trực tiếp tiếp nhận, đọc, phân loại và routing các yêu cầu bảo hành/sửa chữa. |
+| **2. Current Workflow** | Khách hàng complaint ──> CS tiếp nhận yêu cầu và tra cứu thông tin xe/lịch sử sửa chữa ──> đánh giá loại lỗi và mức độ nghiêm trọng ──> phân loại, chuyển case đến Service Center phù hợp. |
+| **3. Bottleneck** | Đọc hiểu complaint, xác định loại lỗi/severity và routing case là bottleneck lớn nhất vì thông tin đầu vào thường không có cấu trúc và phụ thuộc nhiều vào kinh nghiệm của CS. |
+| **4. Business Impact** | Với giả định (assumption) 100.000 requests/năm × 8 phút/request, hoạt động manual triage tiêu tốn khoảng 13.333 giờ/năm, tương đương khoảng 6,7 FTE/năm nếu quy đổi 2.000 giờ/FTE. Gây chậm trễ phản hồi và tăng tỉ lệ nghẽn hệ thống giờ cao điểm. |
+| **5. Success Metric** | Giảm thời gian triage từ ~8 phút xuống dưới 3 phút/ticket, đồng thời đạt độ chính xác phân loại loại lỗi và routing trên 90%. |
+| **6. Operational Boundary** | **ĐƯỢC PHÉP:** AI được phép đọc và hiểu complaint, trích xuất VIN/model/triệu chứng, phân loại lỗi và severity, đề xuất khả năng áp dụng warranty, định tuyến service team phù hợp, liệt kê thông tin còn thiếu và draft phản hồi.<br>**CẤM (BOUNDARY):** AI **tuyệt đối không được** tự quyết định chấp nhận hoặc từ chối warranty, không được đưa ra chẩn đoán kỹ thuật cuối cùng, không được cam kết chi phí hay lịch sửa chữa thay con người, và bắt buộc phải đưa vào **Human Review** đối với các case có mức độ nghiêm trọng (Critical). |
 
 ## 3.3. Future-State Flow & AI Fit
-* **Mức độ phù hợp (AI Fit):** **LLM Feature** (Kết hợp với Rule-based ban đầu để lọc rác, sau đó LLM đóng vai trò phiên dịch và tóm tắt log).
+* **Mức độ phù hợp (AI Fit):** **LLM Feature** (Xử lý ngôn ngữ tự nhiên để phân tích văn bản khiếu nại không cấu trúc kết hợp với tra xuất dữ liệu hệ thống).
 * **Mô tả quy trình mới có AI (Future Flow):**
-  * **Bước 1:** Cảm biến xe gửi dữ liệu Telemetry liên tục. Rule-based lọc ra các xe vượt ngưỡng.
-  * **Bước 2 (🔵 AI Step):** LLM tự động tiếp nhận luồng log thô của xe đó, tra cứu vector database (RAG) tài liệu của VinFast và viết một báo cáo chẩn đoán bằng tiếng Việt.
-  * **Bước 3 (🟢 Human-in-the-loop):** Kỹ sư NOC đọc tóm tắt của AI, kiểm tra nhanh và bấm nút duyệt để chuyển cho bộ phận CSKH.
-  * **Kịch bản dự phòng (↩️ Fallback):** Nếu AI không phân tích được mã lỗi lạ hoặc API bị lỗi, hệ thống hiển thị lại log thô để kỹ sư tự đọc theo quy trình cũ.
+  * **Bước 1:** Khách hàng gửi yêu cầu qua App/Web.
+  * **Bước 2 (🔵 AI Step):** LLM tự động quét text, trích xuất thực thể (VIN, triệu chứng), gán nhãn mức độ nghiêm trọng (Severity) và phân loại bảo hành, đồng thời draft sẵn kết quả triage.
+  * **Bước 3 (🟢 Human-in-the-loop):** CS/Service Advisor xem xét nhanh bản draft của AI, chỉnh sửa nếu cần và bấm nút xác nhận routing.
+  * **Kịch bản dự phòng (↩️ Fallback):** Nếu complaint quá mơ hồ hoặc LLM có độ tự tin thấp, hệ thống tự động gán nhãn "Unclassified" và chuyển thẳng vào hàng đợi xử lý thủ công 100% như cũ.
 
 ---
 
@@ -28,4 +28,4 @@
 * [ ] NO-GO (Hủy bỏ dự án)
 
 **Lý giải quyết định (Justification):**
-Dự án đạt mức **GO** vì VinFast đã có sẵn hạ tầng thu thập Telemetry rất mạnh. Việc áp dụng LLM chỉ đóng vai trò phân tích dữ liệu ở tầng giám sát (Monitor Layer), không can thiệp trực tiếp vào Control Layer của xe, do đó rủi ro an toàn được cô lập hoàn toàn. Giải pháp mang lại ROI (Tỷ suất hoàn vốn) lập tức thông qua việc tiết kiệm hàng ngàn giờ công của kỹ sư bảo hành.
+Dự án đạt mức **GO** vì bài toán có định lượng chi phí lãng phí rất rõ ràng (6,7 FTE/năm ~ hàng tỷ đồng chi phí nhân sự). Giải pháp dùng LLM cho bài toán Text Classification & Information Extraction có độ khả thi kỹ thuật cao, dữ liệu lịch sử ticket cũ sẵn có để tinh chỉnh, và rủi ro được kiểm soát chặt chẽ thông qua lớp Human Review trước khi chốt các quyết định bảo hành chính thức.
